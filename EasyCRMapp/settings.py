@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'EasyCRMapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		#Currently using PostgreSQL with psycopg2 Windows Adapter
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'crmeasyDB',
+		'USER': 'postgres',
+		'PASSWORD': 'postgres',
+		'HOST': '/tmp',
+		'PORT': '5432',
     }
 }
 
