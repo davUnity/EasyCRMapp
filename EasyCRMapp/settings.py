@@ -148,4 +148,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+# Since Django isn't really meant to server static files, we can either leave
+# that to a web server or a CDN OR! we'll use a 3rd party tool called "dj-static".
+# dj-static is a middleware utility that can be used to server static files
+# using a WSGI like Gunicorn.
+STATIC_ROOT = 'staticfiles'
+# Default
+STATIC_URL = '/static/EasyCRM/'
+STATICFILES_DIRS = (
+	os.path.join(BASE_DIR, 'static'),
+)
