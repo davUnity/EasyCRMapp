@@ -47,19 +47,25 @@ ENV_ROLE = get_env_variable('ENV_ROLE')
 	# SECURITY WARNING: Don't run with debug turned on in production!
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+	# Instead of hardcoding the password in here, we are setting it as a
+	# environment variable in Windows with: setx CRMEASY_DB_PASS <password>
+CRMEASY_DB_PASS = False
 if ENV_ROLE == 'development':
 	DEBUG = True
 	TEMPLATE_DEBUG = DEBUG
+	CRMEASY_DB_PASS = get_env_variable('CRMEASY_DB_PASS')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2rf5&7(@@=qs#-e9_r65r2o&0fhg#d9*@b568=aug#x8^&)ews'
+	# Instead of hardcoding the password in here, we are setting it as a 
+	# environment variable in Windows with: setx SECRET_KEY <secretKEY>
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
-	# DEFAULT DEBUG
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+# DEFAULT DEBUG
+	# SECURITY WARNING: don't run with debug turned on in production!
+	# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -116,7 +122,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'crmeasyDB',
 		'USER': 'postgres',
-		'PASSWORD': 'postgres',
+		# Note the change is set to whatever the Windows Environment Variable 
+		# was set as.
+		'PASSWORD': CRMEASY_DB_PASS,
 		'HOST': '/tmp',
 		'PORT': '5432',
     }
