@@ -11,10 +11,45 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+	# Since Django treats Development and Production environments differently,
+	# we want to be able to see the error codes that are displayed for each.
+	# This "settings file" that includes the error should obviously be kept
+	# secret to the admin/superusers and not to the client/user.
+	# -----------------------------------------------------------------------
+	# To differentiate, we will use Environment Variables. However, since
+	# Python's default error messages for importing environment variables
+	# is not helpful, we will import a tool that does provide the right error 
+	# messages. 
+	# Credit of this tool goes to the book: "Two Scoops of Django"
 import os
+from django.core.expection import ImproperlyConfigured
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+	# How this tool works:
+	# The first variable = Tells Django what environment it is running in by
+		# setting the ENV_ROLE variable to either development, staging, or
+		# production.
+	# -----------------------------------------------------------------------
+	# For Handling Key Import Errors
+def get_env_variable(var_name):
+	""" Get the Environment Variable or return exception """
+	try:
+		return os.environ[var_name]
+	except KeyError:
+		error_msg = "Set the %s Environment Variable" % var_name
+		raise ImproperlyConfigured(error_msg)
+	#Get ENV Variable key
+ENV_ROLE = get_env_variable('ENV_ROLE')
+	# -----------------------------------------------------------------------
+	# The Second Variable = The DEBUG value will determine how Django displays
+	# errors. IF the value is set to True, a debug page will be shown when errors
+	# are encountered.
+	# SECURITY WARNING: Don't run with debug turned on in production!
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+if ENV_ROLE == 'development':
+	DEBUG = True
+	TEMPLATE_DEBUG = DEBUG
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -22,8 +57,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '2rf5&7(@@=qs#-e9_r65r2o&0fhg#d9*@b568=aug#x8^&)ews'
 
+	# DEFAULT DEBUG
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
